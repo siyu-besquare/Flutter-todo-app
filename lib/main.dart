@@ -23,23 +23,14 @@ class _HomeState extends State<Home> {
   List<Todo_list> entries = [];
 
   void press() {
-    setState(() {});
-    String tit = titleController.text;
-    String desc = descController.text;
+    setState(() {
+      String tit = titleController.text;
+      String desc = descController.text;
 
-    entries.add(Todo_list(tit, desc));
-    // entries.add(title);
-    // entries.add(description);
-    print(entries[0].title);
-    // print(entries[0].description);
+      entries.add(Todo_list(tit, desc));
+      print(entries[0].title);
+    });
   }
-
-  // @override
-  // void dispose() {
-  //   titleController.dispose();
-  //   descController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -50,35 +41,54 @@ class _HomeState extends State<Home> {
       floatingActionButton:
           FloatingActionButton(onPressed: press, child: Icon(Icons.add)),
       body: Column(children: [
-        SizedBox(
-          child: TextField(
-            controller: titleController,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(), labelText: 'Title'),
+        Container(
+          margin: EdgeInsets.all(10),
+          child: SizedBox(
+            child: TextField(
+              controller: titleController,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), labelText: 'Title'),
+            ),
           ),
         ),
-        SizedBox(
-          child: TextField(
-            controller: descController,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(), labelText: 'Description'),
+        Container(
+          margin: EdgeInsets.all(10),
+          child: SizedBox(
+            child: TextField(
+              controller: descController,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), labelText: 'Description'),
+            ),
           ),
         ),
-        ListView.separated(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: entries.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              height: 50,
-              child: Center(
-                child: Text(
-                    '${entries[index].title}, ${entries[index].description}'),
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) =>
-              const Divider(),
+        Expanded(
+          child: ListView.separated(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: entries.length,
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                height: 100,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Item ${index + 1}:',
+                          style: TextStyle(color: Colors.blueGrey[300]),
+                          textScaleFactor: 3),
+                      Text('${entries[index].title}',
+                          style: TextStyle(color: Colors.blue),
+                          textScaleFactor: 2),
+                      Text('${entries[index].description}',
+                          style: TextStyle(color: Colors.blueGrey),
+                          textScaleFactor: 1),
+                    ]),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(color: Colors.blueAccent, thickness: 5),
+          ),
         ),
       ]),
     );
